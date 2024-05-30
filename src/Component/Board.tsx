@@ -38,23 +38,19 @@ const Board:FC = () => {
             const [ch, rowID, colID] = data.split(','); 
           if(validateMoves(ch.substring(1),ch[0],[rowID,colID],[row,col]))
             {
+                console.log(`${ch.substring(1)} is moving from ${rowID},${colID} to ${row},${col}`);
                 setBoard(prevValues => {
-                    const updatedBoard = prevValues.map((r, rIndex) => {
-                      if (rIndex === parseInt(rowID)) {
-                        return r.map((c, cIndex) => (cIndex === parseInt(colID) ? '' : c));
-                      } else if (rIndex === row) {
-                        return r.map((c, cIndex) => (cIndex === col ? ch : c));
-                      }
-                      return r;
-                    });
+                    let values = prevValues.map(row => [...row]); 
+                    values[rowID] = [...values[rowID]]; 
+                    values[rowID].splice(colID, 1, '');
+                    values[row].splice(col, 1, ch);
+                    return values;
+                });
                 
-                    return updatedBoard;
-                  });
+                  
                       setCurrent((prev)=>prev===Player.p1?Player.p2:Player.p1);
                       setCounter((prev)=>({...prev,[current]:prev[current]+1}));
-                console.log(board);
-            }
-
+            } 
           };
           
 

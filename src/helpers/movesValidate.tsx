@@ -16,6 +16,7 @@ const validateMoves = (piece: string,color:string, startPos: number[], endPos: n
     const [fromRow, fromCol] = startPos;
     const [toRow, toCol] = endPos;
 
+
     switch (pieceType[piece]) {
         case 'rook':
             return isRookMove(fromRow, fromCol, toRow, toCol);
