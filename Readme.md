@@ -3,6 +3,7 @@
 
 
 ### Implementation 
+> [!NOTE] used Vite with tailwind css
 
 ## Icons
 - r -> rook
@@ -11,3 +12,9 @@
 - q -> Queen
 - b -> bishop
 - p -> Pawn
+
+
+## run this project 
+ type ```npm run dev``` on terminal
+-  dev server is on port 3000 
+ ```  http://localhost:3000```

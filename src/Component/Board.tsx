@@ -13,7 +13,6 @@ type Counter={
 
 const Board:FC = () => {
 
-    const pieces=['r','k','b','q','kg','p'];
 
     const boardRef=useRef<HTMLDivElement>(null);
 
@@ -37,7 +36,7 @@ const Board:FC = () => {
             const { row, col } = newPosition(e);
             const data = e.dataTransfer?.getData('text/plain');
             const [ch, rowID, colID] = data.split(','); 
-          if(validateMoves(ch.substring(1),[rowID,colID],[row,col],current))
+          if(validateMoves(ch.substring(1),ch[0],[rowID,colID],[row,col]))
             {
                 setBoard(prevValues => {
                     const updatedBoard = prevValues.map((r, rIndex) => {
@@ -52,6 +51,8 @@ const Board:FC = () => {
                     return updatedBoard;
                   });
                       setCurrent((prev)=>prev===Player.p1?Player.p2:Player.p1);
+                      setCounter((prev)=>({...prev,[current]:prev[current]+1}));
+                console.log(board);
             }
 
           };
@@ -62,9 +63,8 @@ const Board:FC = () => {
         Board[0]=['br','bk','bb','bq','bkg','bb','bk','br'];
         Board[1]=['bp','bp','bp','bp','bp','bp','bp','bp'];
         Board[6]=['wp','wp','wp','wp','wp','wp','wp','wp'];
-        Board[7]=['wr','wk','wb','wq','wkg','wb','wk','wr'];
+        Board[7]=['wr','wk','wb','wkg','wq','wb','wk','wr'];
         setBoard(()=>Board);
-        console.log(Board);
 
     },[])
 
@@ -78,8 +78,11 @@ const Board:FC = () => {
                 <h5>{Player.p1}: {counter.White}</h5>
                 <h5>{Player.p2}: {counter.Black}</h5>
             </div>
+
             </div>
-        <div  ref={boardRef} className={`grid grid-cols-8  justify-center w-max h-max mt-[50px]`} onDragOver={e=>e.preventDefault()}  onDrop={handleDrop} >
+            <h5 className=" " >Current Player : {current}</h5>
+
+        <div  ref={boardRef} className={`grid grid-cols-8  justify-center w-max h-max mt-[10px]`} onDragOver={e=>e.preventDefault()}  onDrop={handleDrop} >
         {board&&
         board.map((row,rowNo)=>(
                     row.map((cell,ColNo)=>(
@@ -87,7 +90,6 @@ const Board:FC = () => {
                     ))
             ))}
         </div>
-        <h5 className="mt-5" >Current Player : {current}</h5>
         </div> 
     );
 }

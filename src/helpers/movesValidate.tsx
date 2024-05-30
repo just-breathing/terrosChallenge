@@ -1,38 +1,74 @@
 
-enum Player {
-    p1='White',
-    p2='Black'
-}
-const validateMoves = ( piece: string, startPos:number[],endPos:number[],current:string) => {
 
-            const pieceType: Record<string, string> = {
-                r: 'rook',
-                k: 'king',
-                b: 'bishop',
-                q: 'queen',
-                kg: 'king',
-                p: 'pawn',
-            };
 
+const pieceType: Record<string, string> = {
+    r: 'rook',
+    k: 'knight',
+    b: 'bishop',
+    q: 'queen',
+    kg: 'king',
+    p: 'pawn',
+};
+
+
+
+const validateMoves = (piece: string,color:string, startPos: number[], endPos: number[]) => {
     const [fromRow, fromCol] = startPos;
     const [toRow, toCol] = endPos;
 
-
-    if (pieceType[piece] === 'pawn') {
-      const isPawnMovingForward = current === Player.p1 && toRow < fromRow || current === Player.p2 && toRow > fromRow;
-      if (isPawnMovingForward) return true;
-
-      const isPawnMovingDiagonally = Math.abs(toRow - fromRow) === 1 && Math.abs(toCol - fromCol) === 1;
-      if (isPawnMovingDiagonally) return true;
-
-      const isPawnMovingHorizontally = Math.abs(toCol - fromCol) === 1 && toRow === fromRow;
-      if (isPawnMovingHorizontally) return true;
-
-      const isPawnMovingVertically = Math.abs(toRow - fromRow) === 1 && toCol === fromCol;
-      if (isPawnMovingVertically) return true;
-
-      return false;
+    switch (pieceType[piece]) {
+        case 'rook':
+            return isRookMove(fromRow, fromCol, toRow, toCol);
+        case 'knight':
+            return isKnightMove(fromRow, fromCol, toRow, toCol);
+        case 'bishop':
+            return isBishopMove(fromRow, fromCol, toRow, toCol);
+        case 'king':
+            return isKingMove(fromRow, fromCol, toRow, toCol);
+        case 'queen':
+            return isQueenMove(fromRow, fromCol, toRow, toCol);
+        case 'pawn':
+            return isPawnMove( fromRow, fromCol, toRow, toCol,color);
+        default:
+            return false;
     }
+};
+
+const isKnightMove = (fromRow: number, fromCol: number, toRow: number, toCol: number) => {
+    const distanceRow = Math.abs(toRow - fromRow);
+    const distanceCol = Math.abs(toCol - fromCol);
+    return (distanceRow === 2 && distanceCol === 1) || (distanceRow === 1 && distanceCol === 2);
+};
+
+const isRookMove = (fromRow: number, fromCol: number, toRow: number, toCol: number) => {
+    const isMovingHorizontally = Math.abs(toRow - fromRow) === 0 && Math.abs(toCol - fromCol) > 0;
+    const isMovingVertically = Math.abs(toCol - fromCol) === 0 && Math.abs(toRow - fromRow) > 0;
+
+    return isMovingHorizontally || isMovingVertically;
+};
+
+const isBishopMove = (fromRow: number, fromCol: number, toRow: number, toCol: number) => {
+    const isMovingDiagonally = Math.abs(toRow - fromRow) === Math.abs(toCol - fromCol);
+
+    return isMovingDiagonally;
+};
+
+const isKingMove = (fromRow: number, fromCol: number, toRow: number, toCol: number) => {
+    return (
+        Math.abs(toRow - fromRow) <= 1 &&
+        Math.abs(toCol - fromCol) <= 1
+    );
+};
+
+const isQueenMove = (fromRow: number, fromCol: number, toRow: number, toCol: number) => {
+    return isRookMove(fromRow, fromCol, toRow, toCol) || isBishopMove(fromRow, fromCol, toRow, toCol);
+};
+
+const isPawnMove = ( fromRow: number, fromCol: number, toRow: number, toCol: number,color:string) => {
+    const isMovingDiagonally = Math.abs(toRow - fromRow) === 1 && Math.abs(toCol - fromCol) === 1;
+    const isMovingVertically =   Math.abs(toCol - fromCol) === 0 && (color==='b' ?(toRow - fromRow) === 1:  fromRow - toRow === 1);
+    
+    return  isMovingDiagonally  || isMovingVertically;
 };
 
 export default validateMoves
