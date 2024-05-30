@@ -20,7 +20,7 @@ const validateMoves = ( piece: string, startPos:number[],endPos:number[],current
 
     if (pieceType[piece] === 'pawn') {
       const isPawnMovingForward = current === Player.p1 && toRow < fromRow || current === Player.p2 && toRow > fromRow;
-      if (isPawnMovingForward) return false;
+      if (isPawnMovingForward) return true;
 
       const isPawnMovingDiagonally = Math.abs(toRow - fromRow) === 1 && Math.abs(toCol - fromCol) === 1;
       if (isPawnMovingDiagonally) return true;
